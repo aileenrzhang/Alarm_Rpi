@@ -6,6 +6,9 @@ import time
 from gpiozero import Button
 import sys
 import RPi.GPIO as GPIO
+import json
+
+json_alarmtime = json.dum
 
 minutes_before_alarm = 1
 seconds_before_alarm = minutes_before_alarm * 60
@@ -30,8 +33,7 @@ def job():
     time_between_leds = seconds_before_alarm / 7
     
     GPIO.output(5,GPIO.HIGH)
-    for i in range(time_between_leds / 0.1):  
-        time.sleep(time_between_leds * 0.1)
+    time.sleep(time_between_leds)
     GPIO.output(6, GPIO.HIGH)
     time.sleep(time_between_leds)
     GPIO.output(16,GPIO.HIGH)
@@ -47,9 +49,9 @@ def job():
     GPIO.output(27, GPIO.HIGH)
     time.sleep(time_between_leds)
     
-    subprocess.call(['aplay /home/pi/Desktop/Alarm/alarm_quiet_for_testing.wav'], shell=True)
+    subprocess.call(['aplay /home/pi/Alarm_Rpi/alarm_quiet_for_testing.wav'], shell=True)
     
-alarm_time = '17:31'
+alarm_time = '19:53'
 str_times = alarm_time.split(':')
 
 times = [0,0]
@@ -66,9 +68,9 @@ else:
     else:
         times[0] = times[0] - 1
         
-alarm_time = ':'.join(str(times))
+alarm_time = str(times[0]) + ':' + str(times[1])
 
-schedule.every().day.at('17:37').do(job)
+schedule.every().day.at(alarm_time).do(job)
 
 
 while True:
